@@ -1,0 +1,448 @@
+:root {
+  --lotto-primary: #4e5ba6;
+  --lotto-greyscale-1: #ffffff;
+  --lotto-greyscale-2: #fcfcfd;
+  --lotto-greyscale-3: #b4b4b4;
+  --lotto-greyscale-4: #8b8b8b;
+  --lotto-greyscale-5: #000000;
+}
+
+.title {
+  font-family: Roboto;
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 36px;
+  letter-spacing: 0px;
+}
+
+.subtitle {
+  font-family: Roboto;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: 0.15px;
+}
+
+.body {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+}
+
+.placeholder {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+}
+
+.button,
+.caption {
+  font-family: Roboto;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 1.25px;
+}
+
+.error-message {
+  color: red;
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 1.25px;
+}
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+input {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  box-sizing: border-box;
+  border: 1px solid black;
+}
+
+button {
+  all: unset;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+/* HTML5 display-role reset for older browsers */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+input:focus {
+  outline: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.main-contents {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  gap: 28px;
+  padding-top: 40px;
+  padding-bottom: 32px;
+  width: 414px;
+  min-height: 414px;
+  border: 1px solid #0000001f;
+  border-radius: 4px;
+  background-color: var(--lotto-greyscale-1);
+}
+
+.main-contents div {
+  width: 382px;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  color: var(--lotto-greyscale-5);
+}
+
+.input-contents {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.input-contents div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.input-contents input {
+  display: flex;
+  width: 310px;
+  height: 36px;
+  gap: 10px;
+  padding: 8px 8px 0px;
+  border: 1px solid var(--lotto-greyscale-3);
+  border-radius: 4px;
+}
+
+.input-contents button {
+  width: 56px;
+  border-radius: 4px;
+  padding: 6px 6px 6px 8px;
+  text-align: center;
+  background-color: var(--lotto-primary);
+  color: var(--lotto-greyscale-1);
+}
+
+.lotto-contents {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lotto-container_lotto {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 8px;
+  color: var(--lotto-greyscale-5);
+}
+
+.winningLotto-contents {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.winningLotto-contents div {
+  width: fit-content;
+}
+
+.winningLotto-contents > div {
+  display: flex;
+  width: 382px;
+  justify-content: space-between;
+}
+
+.winningLotto-contents_bonusNumber {
+  text-align: right;
+}
+
+.winningLotto-contents input {
+  width: 34px;
+  height: 36px;
+  border: 1px solid var(--lotto-greyscale-3);
+  border-radius: 4px;
+}
+
+.result-contents {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 6px 6px 8px;
+  width: 382px;
+  height: 36px;
+  text-align: center;
+  border-radius: 4px;
+  background-color: var(--lotto-primary);
+  color: var(--lotto-greyscale-1);
+}
+
+header {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 0px 130px;
+  height: 64px;
+  border-bottom-width: 1px;
+  background-color: var(--lotto-primary);
+}
+
+header h1 {
+  color: var(--lotto-greyscale-1) !important;
+}
+
+content {
+  display: flex;
+  justify-content: center;
+  padding: 84px 0px;
+}
+
+modal {
+  position: fixed;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #00000080;
+}
+
+modal div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  padding-top: 40px;
+  padding-bottom: 32px;
+  width: 350px;
+  border-radius: 4px;
+  background-color: white;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+  border-top: 1px solid #4e5ba633;
+}
+
+footer p {
+  color: var(--lotto-primary) !important;
+}
+
+modal div p,
+table,
+button {
+  width: 319px;
+  text-align: center;
+}
+
+.prize-contents {
+  position: relative;
+}
+
+.prize-contents > p:nth-child(4) {
+  font-family: Roboto;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  color: var(--lotto-greyscale-5);
+}
+
+.prize-contents > button {
+  height: 36px;
+  border-radius: 4px;
+  background-color: var(--lotto-primary);
+  color: var(--lotto-greyscale-1);
+}
+
+.close-button {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.result-table thead {
+  border-bottom: 1px solid #0000001f;
+  border-top: 1px solid #0000001f;
+  font-family: Roboto;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.result-table tr {
+  border-bottom: 1px solid #0000001f;
+}
+
+.result-table th,
+td {
+  padding: 8px 0px;
+}
+
+body {
+  background-color: var(--lotto-greyscale-2);
+}

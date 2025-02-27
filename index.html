@@ -5,12 +5,112 @@
     <title>🎱 행운의 로또</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script type="module" crossorigin src="/javascript-lotto/assets/index-DaKOjhqt.js"></script>
+    <script type="module" crossorigin src="/javascript-lotto/assets/index-CWWhrhDV.js"></script>
+    <link rel="stylesheet" crossorigin href="/javascript-lotto/assets/index-CwePMkca.css">
   </head>
 
   <body>
-    <div id="app">
-      <h1>🎱 행운의 로또</h1>
-    </div>
+    <header id="app">
+      <h1 class="title">🎱 행운의 로또</h1>
+    </header>
+    <content class="content">
+      <card class="main-contents">
+        <p class="title">🎱 내 번호 당첨 확인 🎱</p>
+        <div class="input-contents body">
+          <p>구입할 금액을 입력해주세요.</p>
+          <div>
+            <input placeholder="금액" />
+            <button class="caption">구입</button>
+          </div>
+        </div>
+        <div class="lotto-contents">
+          <!-- <p class="body">총 7개를 구매하였습니다.</p> -->
+          <!-- <div>
+            <div class="lotto-container_lotto">
+              <img src="./src/assets/lotto.png" />
+              <p class="body">1, 2, 3, 4, 5, 6</p>
+            </div>
+            <div class="lotto-container_lotto">
+              <img src="./src/assets/lotto.png" />
+              <p class="body">1, 2, 3, 4, 5, 6</p>
+            </div>
+            <div class="lotto-container_lotto">
+              <img src="./src/assets/lotto.png" />
+              <p class="body">1, 2, 3, 4, 5, 6</p>
+            </div>
+            <div class="lotto-container_lotto">
+              <img src="./src/assets/lotto.png" />
+              <p class="body">1, 2, 3, 4, 5, 6</p>
+            </div>
+            <div class="lotto-container_lotto">
+              <img src="./src/assets/lotto.png" />
+              <p class="body">1, 2, 3, 4, 5, 6</p>
+            </div>
+          </div> -->
+        </div>
+        <div class="winningLotto-contents body">
+          <p>지난 주 당첨번호 6개와 보너스 번호 1개를 입력해주세요.</p>
+          <div>
+            <div class="winningLotto-contents_winningLotto">
+              <p>당첨 번호</p>
+              <div>
+                <input />
+                <input />
+                <input />
+                <input />
+                <input />
+                <input />
+              </div>
+            </div>
+            <div class="winningLotto-contents_bonusNumber">
+              <p>보너스 번호</p>
+              <input />
+            </div>
+          </div>
+        </div>
+        <button class="result-contents caption">결과 확인하기</button>
+      </card>
+    </content>
+
+    <modal>
+      <div class="prize-contents">
+        <p class="subtitle">🏆 당첨 통계 🏆</p>
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAD0SURBVHgB1ddbCgIxDIXhgxud7izZ6eiogYpae0lyxh/60ubhg0KhwGvbbQn4HYbt2+FxsD8XEyuV4w1bI5lY+eDYWkgGVhqOO1YbA1lY+WFQG1TwsN1IJnYYycBOIzOxy8gMrBsyEuuOjMCGIT2x4UgPbBpyBZuOnMHSkCNYOrIXewrkClZBSvEHSEuRgLxgvd1pJjRB/9ULSI0gadgZZDq25zFXkLE9SEtBwo4gadgZZDp2BZmG9UCGYz2RYdgIpDs2EumGzUAuYzOR01gGchjLRA5hC7jIHmyxoQIu0lI0kFYBF2kpGkir4AS/RTwMpd64AjnORak3FWDiAAAAAElFTkSuQmCC"
+          alt="닫기 버튼"
+          class="close-button"
+        />
+        <table class="result-table">
+          <!-- <thead>
+            <tr>
+              <th>일치 갯수</th>
+              <th>당첨금</th>
+              <th>당첨 갯수</th>
+            </tr>
+          </thead> -->
+          <tbody class="body">
+            <!-- <tr>
+              <td>3개</td>
+              <td>5,000</td>
+              <td>n개</td>
+            </tr>
+            <tr>
+              <td>3개</td>
+              <td>5,000</td>
+              <td>n개</td>
+            </tr>
+            <tr>
+              <td>3개</td>
+              <td>5,000</td>
+              <td>n개</td>
+            </tr> -->
+          </tbody>
+        </table>
+        <!-- <p>당신의 총 수익률은 %입니다.</p> -->
+        <button class="restart-button">다시 시작하기</button>
+      </div>
+    </modal>
+
+    <footer><p class="caption">Copyright 2023. woowacourse</p></footer>
   </body>
 </html>
