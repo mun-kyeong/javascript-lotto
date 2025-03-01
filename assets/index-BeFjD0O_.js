@@ -184,6 +184,7 @@ const allowModalOpen = () => {
   const closeButton = document.querySelector("modal .close-button");
   prizeResultButton.addEventListener("click", handleModal);
   closeButton.addEventListener("click", handleModal);
+  document.body.style.overflow = "hidden";
 };
 const handleModal = () => {
   const prizeResultModal = document.querySelector("modal");
@@ -203,7 +204,6 @@ const allowWinningLotto = () => {
   const resultSubmitButton = document.querySelector(".result-contents");
   winningLottoContainer.style.display = "flex";
   resultSubmitButton.style.display = "flex";
-  document.body.style.overflow = "hidden";
 };
 const resetLotto = () => {
   const prizeResultModal = document.querySelector("modal");
@@ -484,6 +484,7 @@ const printRateResult = (rate) => {
   const prizeContents = document.querySelector(".prize-contents");
   const restartButton = document.querySelector(".prize-contents button");
   const rateResult = document.createElement("p");
+  if (rate < 0) rate = 0;
   rateResult.innerText = `당신의 총 수익률은 ${rate}%입니다.`;
   prizeContents.insertBefore(rateResult, restartButton);
 };

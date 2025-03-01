@@ -295,6 +295,11 @@ input[type="number"] {
   gap: 8px;
 }
 
+.lotto-contents > div {
+  max-height: 400px;
+  overflow: auto;
+}
+
 .lotto-container_lotto img {
   width: 34px;
   height: 36px;
