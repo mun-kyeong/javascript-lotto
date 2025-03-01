@@ -190,9 +190,20 @@ const handleModal = () => {
   const modalOpenStatus = window.getComputedStyle(prizeResultModal).display;
   if (modalOpenStatus === "none") {
     prizeResultModal.style.display = "flex";
+    document.body.style.overflow = "hidden";
   } else if (modalOpenStatus === "flex") {
     prizeResultModal.style.display = "none";
+    document.body.style.overflow = "auto";
   }
+};
+const allowWinningLotto = () => {
+  const winningLottoContainer = document.querySelector(
+    ".winningLotto-contents"
+  );
+  const resultSubmitButton = document.querySelector(".result-contents");
+  winningLottoContainer.style.display = "flex";
+  resultSubmitButton.style.display = "flex";
+  document.body.style.overflow = "hidden";
 };
 const resetLotto = () => {
   const prizeResultModal = document.querySelector("modal");
@@ -218,6 +229,14 @@ const resetLotto = () => {
   winningLottoContents.style.display = "none";
   const resultContents = document.querySelector(".result-contents");
   resultContents.style.display = "none";
+  const priceInput = document.querySelector(".input-contents input");
+  priceInput.disabled = false;
+  priceInput.style.backgroundColor = "white";
+  priceInput.style.color = "black";
+  const priceButton = document.querySelector(".input-contents button");
+  priceButton.disabled = false;
+  priceButton.style.backgroundColor = "#4e5ba6";
+  priceButton.style.cursor = "pointer";
 };
 const initLotto = () => {
   const restartButton = document.querySelector(".restart-button");
@@ -225,6 +244,16 @@ const initLotto = () => {
     resetLotto();
     WebApp();
   });
+};
+const disableInputPrice = () => {
+  const priceInput = document.querySelector(".input-contents input");
+  priceInput.disabled = true;
+  priceInput.style.backgroundColor = "lightgray";
+  priceInput.style.color = "gray";
+  const priceButton = document.querySelector(".input-contents button");
+  priceButton.disabled = true;
+  priceButton.style.backgroundColor = "gray";
+  priceButton.style.cursor = "default";
 };
 class Validate {
   purchaseUnit(price) {
@@ -327,51 +356,57 @@ const removeErrorField = (errorField) => {
     prevErrorMessage.remove();
   }
 };
+const repeatGetPrice = (resolve) => {
+  const userInputPrice = document.querySelector(".input-contents input").value;
+  try {
+    validatePrice(userInputPrice);
+    removeErrorField(".input-contents");
+    allowWinningLotto();
+    resolve(userInputPrice);
+  } catch (error) {
+    printErrorMessage(".input-contents", error);
+  }
+};
 const getPrice = () => {
   return new Promise((resolve) => {
-    const userInputPrice = document.querySelector(".input-contents input");
     const purchaseButton = document.querySelector(".input-contents button");
-    const winningLottoContainer = document.querySelector(
-      ".winningLotto-contents"
-    );
-    const resultSubmitButton = document.querySelector(".result-contents");
     purchaseButton.addEventListener("click", async () => {
-      try {
-        validatePrice(userInputPrice.value);
-        removeErrorField(".input-contents");
-        winningLottoContainer.style.display = "flex";
-        resultSubmitButton.style.display = "flex";
-        resolve(userInputPrice.value);
-      } catch (error) {
-        printErrorMessage(".input-contents", error);
-      }
+      repeatGetPrice(resolve);
     });
   });
 };
+const getWinningNumber = () => {
+  const winningNumbers = [];
+  document.querySelectorAll(".winningLotto-contents_winningLotto div input").forEach((winningNumber) => {
+    winningNumbers.push(winningNumber.value);
+  });
+  return winningNumbers;
+};
+const getBonusNumber = () => {
+  return document.querySelector(".winningLotto-contents_bonusNumber input").value;
+};
+const parseNumber = (winningNumbers, bonusNumber) => {
+  winningNumbers = winningNumbers.map((winningNumber) => Number(winningNumber));
+  bonusNumber = Number(bonusNumber);
+  return { winningNumbers, bonusNumber };
+};
+const repeatWinningLotto = (resolve) => {
+  const winningNumbers = getWinningNumber();
+  const bonusNumber = getBonusNumber();
+  try {
+    validateWinningNumbers(winningNumbers);
+    validateBonusNumber(winningNumbers, bonusNumber);
+    removeErrorField(".winningLotto-contents");
+    resolve(parseNumber(winningNumbers, bonusNumber));
+  } catch (error) {
+    printErrorMessage(".winningLotto-contents", error);
+  }
+};
 const getWinningLotto = async () => {
-  const winningNumberInputs = document.querySelectorAll(
-    ".winningLotto-contents_winningLotto div input"
-  );
-  const bonusNumberInput = document.querySelector(
-    ".winningLotto-contents_bonusNumber input"
-  );
   const submitResultButton = document.querySelector(".result-contents");
   return new Promise((resolve) => {
     submitResultButton.addEventListener("click", async () => {
-      const winningNumbers = [];
-      let bonusNumber = "";
-      winningNumberInputs.forEach((winningNumber) => {
-        winningNumbers.push(winningNumber.value);
-      });
-      bonusNumber = bonusNumberInput.value;
-      try {
-        validateWinningNumbers(winningNumbers);
-        validateBonusNumber(winningNumbers, bonusNumber);
-        removeErrorField(".winningLotto-contents");
-        resolve({ winningNumbers, bonusNumber });
-      } catch (error) {
-        printErrorMessage(".winningLotto-contents", error);
-      }
+      repeatWinningLotto(resolve);
     });
   });
 };
@@ -382,6 +417,7 @@ const printLottoCount = (price) => {
   lottoCountText.className = "body";
   lottoCountText.innerText = `총 ${price / LOTTO.PURCHASE.unit}개를 구매하였습니다.`;
   lottoContents.appendChild(lottoCountText);
+  disableInputPrice();
 };
 const createLottoObject = (lotto) => {
   const lottoContainer = document.createElement("div");
