@@ -177,84 +177,84 @@ calculateTotalPrize_fn = function(prizeResult) {
     }
   }, 0);
 };
-const allowModalOpen = () => {
-  const prizeResultModal = document.querySelector("modal");
-  prizeResultModal.style.display = "flex";
-  const prizeResultButton = document.querySelector(".result-contents");
-  const closeButton = document.querySelector("modal .close-button");
-  prizeResultButton.addEventListener("click", handleModal);
-  closeButton.addEventListener("click", handleModal);
-  document.body.style.overflow = "hidden";
+const hideLayout = (layout) => {
+  $(layout).addClass("hide-layout").removeClass("show-layout reset-layout");
 };
-const handleModal = () => {
-  const prizeResultModal = document.querySelector("modal");
-  const modalOpenStatus = window.getComputedStyle(prizeResultModal).display;
-  if (modalOpenStatus === "none") {
-    prizeResultModal.style.display = "flex";
-    document.body.style.overflow = "hidden";
-  } else if (modalOpenStatus === "flex") {
-    prizeResultModal.style.display = "none";
-    document.body.style.overflow = "auto";
-  }
+const showLayout = (layout) => {
+  $(layout).removeClass("hide-layout reset-layout").addClass("show-layout");
 };
-const allowWinningLotto = () => {
-  const winningLottoContainer = document.querySelector(
-    ".winningLotto-contents"
-  );
-  const resultSubmitButton = document.querySelector(".result-contents");
-  winningLottoContainer.style.display = "flex";
-  resultSubmitButton.style.display = "flex";
+const resetLayout = (layout) => {
+  $(layout).addClass("reset-layout").removeClass("hide-layout show-layout");
 };
 const resetLotto = () => {
-  const prizeResultModal = document.querySelector("modal");
-  prizeResultModal.style.display = "none";
-  const inputFields = document.querySelectorAll("input");
-  inputFields.forEach((input) => {
-    input.value = "";
+  const $prizeResultModal = $("modal");
+  resetLayout($prizeResultModal);
+  $("form").each((_, form) => {
+    $(form).get(0).reset();
   });
-  const lottoContents = document.querySelector(".lotto-contents");
-  lottoContents.innerHTML = "";
-  const restartButton = document.querySelector(".result-contents");
-  restartButton.removeEventListener("click", handleModal);
-  const resultTable = document.querySelector(".result-table");
-  const tableBody = document.createElement("tbody");
-  tableBody.className = "body";
-  resultTable.innerHTML = "";
-  resultTable.appendChild(tableBody);
-  const resultText = document.querySelectorAll(".prize-contents p");
-  if (resultText[1]) {
-    resultText[1].remove();
+  $(".lotto-contents").html("");
+  $(".result-contents").off("click", handleModal);
+  const $resultTable = $(".result-table");
+  const $tableBody = $("<tbody>").addClass("body");
+  $resultTable.empty().append($tableBody);
+  const $resultText = $(".prize-contents p");
+  if ($resultText.eq(1).length) {
+    $resultText.eq(1).remove();
   }
-  const winningLottoContents = document.querySelector(".winningLotto-contents");
-  winningLottoContents.style.display = "none";
-  const resultContents = document.querySelector(".result-contents");
-  resultContents.style.display = "none";
-  const priceInput = document.querySelector(".input-contents input");
-  priceInput.disabled = false;
-  priceInput.style.backgroundColor = "white";
-  priceInput.style.color = "black";
-  const priceButton = document.querySelector(".input-contents button");
-  priceButton.disabled = false;
-  priceButton.style.backgroundColor = "#4e5ba6";
-  priceButton.style.cursor = "pointer";
-  document.body.style.overflow = "auto";
+  const $winningLottoContents = $(".winningLotto-contents");
+  resetLayout($winningLottoContents);
+  const $resultContents = $(".result-contents");
+  resetLayout($resultContents);
+  const $priceInput = $(".input-contents input");
+  $priceInput.prop("disabled", false).css({ "background-color": "white", color: "black" });
+  const $priceButton = $(".input-contents button");
+  $priceButton.prop("disabled", false).css({ "background-color": "#4e5ba6", cursor: "pointer" });
+  $("body").css("overflow", "auto");
+};
+const focusInput = (className) => {
+  setTimeout(() => {
+    $(className).first().focus();
+  }, 300);
 };
 const initLotto = () => {
-  const restartButton = document.querySelector(".restart-button");
-  restartButton.addEventListener("click", () => {
+  resetLotto();
+  $(".restart-button").on("click", () => {
     resetLotto();
+    focusInput(".input-contents input");
     WebApp();
   });
 };
 const disableInputPrice = () => {
-  const priceInput = document.querySelector(".input-contents input");
-  priceInput.disabled = true;
-  priceInput.style.backgroundColor = "lightgray";
-  priceInput.style.color = "gray";
-  const priceButton = document.querySelector(".input-contents button");
-  priceButton.disabled = true;
-  priceButton.style.backgroundColor = "gray";
-  priceButton.style.cursor = "default";
+  const $priceInput = $(".input-contents input");
+  $priceInput.prop("disabled", true).css({ "background-color": "lightgray", color: "gray" });
+  const $priceButton = $(".input-contents button");
+  $priceButton.prop("disabled", true).css({ "background-color": "gray", cursor: "default" });
+};
+const allowModalOpen = () => {
+  const $prizeResultModal = $("modal");
+  showLayout($prizeResultModal);
+  const $prizeResultButton = $(".result-contents");
+  const $closeButton = $("modal .close-button");
+  $prizeResultButton.on("click", handleModal);
+  $closeButton.on("click", handleModal);
+  $("body").css("overflow", "hidden");
+};
+const handleModal = () => {
+  const $prizeResultModal = $("modal");
+  const modalOpenStatus = $prizeResultModal.css("visibility");
+  if (modalOpenStatus === "hidden") {
+    showLayout($prizeResultModal);
+    $("body").css("overflow", "hidden");
+  } else if (modalOpenStatus === "visible") {
+    hideLayout($prizeResultModal);
+    $("body").css("overflow", "auto");
+  }
+};
+const allowWinningLotto = () => {
+  const $winningLottoContainer = $(".winningLotto-contents");
+  const $resultSubmitButton = $(".result-contents");
+  showLayout($winningLottoContainer);
+  showLayout($resultSubmitButton);
 };
 class Validate {
   purchaseUnit(price) {
@@ -336,55 +336,52 @@ const validateWinningNumbers = (winningNumbers) => {
   validate.winningNumbersLength(winningNumbers);
 };
 const printErrorMessage = (errorField, error) => {
-  const prevErrorMessage = document.querySelector(
-    `${errorField} .error-message`
-  );
-  if (prevErrorMessage) {
-    prevErrorMessage.innerText = error.message;
+  const prevErrorMessage = $(`${errorField} .error-message`);
+  console.log(prevErrorMessage);
+  if (prevErrorMessage.length) {
+    prevErrorMessage.text(error.message);
     return;
   }
-  const errorFieldBlock = document.querySelector(errorField);
-  const errorMessage = document.createElement("p");
-  errorMessage.className = "error-message";
-  errorMessage.innerText = error.message;
-  errorFieldBlock.appendChild(errorMessage);
+  const $errorFieldBlock = $(errorField);
+  const $errorMessage = $("<p>").addClass("error-message").text(error.message);
+  $errorFieldBlock.append($errorMessage);
 };
 const removeErrorField = (errorField) => {
-  const prevErrorMessage = document.querySelector(
-    `${errorField} .error-message`
-  );
-  if (prevErrorMessage) {
-    prevErrorMessage.remove();
+  const $prevErrorMessage = $(errorField).find(".error-message");
+  if ($prevErrorMessage.length) {
+    $prevErrorMessage.remove();
   }
 };
 const repeatGetPrice = (resolve) => {
-  const userInputPrice = document.querySelector(".input-contents input").value;
+  const userInputPrice = $(".input-contents input").val();
   try {
     validatePrice(userInputPrice);
     removeErrorField(".input-contents");
     allowWinningLotto();
+    focusInput(".winningLotto-contents_winningLotto input");
     resolve(userInputPrice);
   } catch (error) {
     printErrorMessage(".input-contents", error);
   }
 };
 const getPrice = () => {
+  console.log(" 1");
   return new Promise((resolve) => {
-    const purchaseButton = document.querySelector(".input-contents button");
-    purchaseButton.addEventListener("click", async () => {
+    $(".input-contents form").on("submit", async (event) => {
+      event.preventDefault();
       repeatGetPrice(resolve);
     });
   });
 };
 const getWinningNumber = () => {
   const winningNumbers = [];
-  document.querySelectorAll(".winningLotto-contents_winningLotto div input").forEach((winningNumber) => {
-    winningNumbers.push(winningNumber.value);
+  $(".winningLotto-contents_winningLotto div input").each(function() {
+    winningNumbers.push($(this).val());
   });
   return winningNumbers;
 };
 const getBonusNumber = () => {
-  return document.querySelector(".winningLotto-contents_bonusNumber input").value;
+  return $(".winningLotto-contents_bonusNumber input").val();
 };
 const parseNumber = (winningNumbers, bonusNumber) => {
   winningNumbers = winningNumbers.map((winningNumber) => Number(winningNumber));
@@ -404,41 +401,37 @@ const repeatWinningLotto = (resolve) => {
   }
 };
 const getWinningLotto = async () => {
-  const submitResultButton = document.querySelector(".result-contents");
   return new Promise((resolve) => {
-    submitResultButton.addEventListener("click", async () => {
+    $("#lottoForm").on("submit", async (event) => {
+      event.preventDefault();
       repeatWinningLotto(resolve);
     });
   });
 };
 const lottoImg = "/javascript-lotto/assets/lotto-CqPatwZy.png";
 const printLottoCount = (price) => {
-  const lottoContents = document.querySelector(".lotto-contents");
-  const lottoCountText = document.createElement("p");
-  lottoCountText.className = "body";
-  lottoCountText.innerText = `총 ${price / LOTTO.PURCHASE.unit}개를 구매하였습니다.`;
-  lottoContents.appendChild(lottoCountText);
+  const $lottoContents = $(".lotto-contents");
+  const $lottoCountText = $("<p>").addClass("body").text(`총 ${price / LOTTO.PURCHASE.unit}개를 구매하였습니다.`);
+  $lottoContents.append($lottoCountText);
   disableInputPrice();
 };
 const createLottoObject = (lotto) => {
-  const lottoContainer = document.createElement("div");
-  lottoContainer.className = "lotto-container_lotto";
-  const lottoImage = document.createElement("img");
-  lottoImage.src = lottoImg;
-  const lottoNumbers = document.createElement("p");
-  lottoNumbers.innerText = lotto.numbers.map((number) => number).join(", ");
-  lottoContainer.appendChild(lottoImage);
-  lottoContainer.appendChild(lottoNumbers);
-  return lottoContainer;
+  const $lottoContainer = $("<div>").addClass("lotto-container_lotto");
+  const $lottoImage = $("<img>").attr("src", lottoImg);
+  const $lottoNumbers = $("<p>").text(
+    lotto.numbers.map((number) => number).join(", ")
+  );
+  $lottoContainer.append($lottoImage, $lottoNumbers);
+  return $lottoContainer[0];
 };
 const printLottos = (lottos) => {
-  const lottoContents = document.querySelector(".lotto-contents");
-  const lottosContainer = document.createElement("div");
+  const $lottoContents = $(".lotto-contents");
+  const $lottosContainer = $("<div>");
   const lottoObjects = lottos.map((lotto) => createLottoObject(lotto));
   lottoObjects.forEach((lottoObject) => {
-    lottosContainer.appendChild(lottoObject);
+    $lottosContainer.append(lottoObject);
   });
-  lottoContents.appendChild(lottosContainer);
+  $lottoContents.append($lottosContainer);
 };
 const prizeSummary = [
   { count: "3개", prize: LOTTO.PRIZES.fifth, label: 3 },
@@ -452,41 +445,39 @@ const prizeSummary = [
   { count: "6개", prize: LOTTO.PRIZES.first, label: 6 }
 ];
 const createPrizeRow = ({ count, prize, label }, prizeResult) => {
-  const tableRow = document.createElement("tr");
+  const $tableRow = $("<tr>");
   const rowData = [count, prize.toLocaleString(), `${prizeResult[label]}개`];
   rowData.forEach((data) => {
-    const cell = document.createElement("td");
-    cell.innerText = data;
-    tableRow.appendChild(cell);
+    const $cell = $("<td>").text(data);
+    $tableRow.append($cell);
   });
-  return tableRow;
+  return $tableRow[0];
 };
 const printPrizeHeader = () => {
-  const resultTable = document.querySelector(".result-table");
+  const $resultTable = $(".result-table");
   const headers = ["일치 갯수", "당첨금", "당첨 갯수"];
-  const tableHeader = document.createElement("thead");
-  const tableRow = document.createElement("tr");
+  const $tableHeader = $("<thead>");
+  const $tableRow = $("<tr>");
   headers.forEach((headerText) => {
-    const headerCell = document.createElement("th");
-    headerCell.innerText = headerText;
-    tableRow.appendChild(headerCell);
+    const $headerCell = $("<th>").text(headerText);
+    $tableRow.append($headerCell);
   });
-  tableHeader.appendChild(tableRow);
-  resultTable.appendChild(tableHeader);
+  $tableHeader.append($tableRow);
+  $resultTable.append($tableHeader);
 };
 const printPrizeResult = (prizeResult) => {
-  const tableBody = document.querySelector(".result-table .body");
+  const $tableBody = $(".result-table .body");
   prizeSummary.forEach(
-    (summary) => tableBody.appendChild(createPrizeRow(summary, prizeResult))
+    (summary) => $tableBody.append(createPrizeRow(summary, prizeResult))
   );
 };
 const printRateResult = (rate) => {
-  const prizeContents = document.querySelector(".prize-contents");
-  const restartButton = document.querySelector(".prize-contents button");
-  const rateResult = document.createElement("p");
+  $(".prize-contents");
+  const $restartButton = $(".prize-contents button");
+  const $rateResult = $("<p></p>").addClass("prize-contents_rate-result");
   if (rate < 0) rate = 0;
-  rateResult.innerText = `당신의 총 수익률은 ${rate}%입니다.`;
-  prizeContents.insertBefore(rateResult, restartButton);
+  $rateResult.text(`당신의 총 수익률은 ${rate}%입니다.`);
+  $rateResult.insertBefore($restartButton);
 };
 const printLottoResult = (prizeResult, rate) => {
   printPrizeHeader();
