@@ -6,7 +6,7 @@ var __privateGet = (obj, member, getter) => (__accessCheck(obj, member, "read fr
 var __privateAdd = (obj, member, value) => member.has(obj) ? __typeError("Cannot add the same private member more than once") : member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "write to private field"), setter ? setter.call(obj, value) : member.set(obj, value), value);
 var __privateMethod = (obj, member, method) => (__accessCheck(obj, member, "access private method"), method);
-var _numbers, _LottoManager_static, generateRandomNumber_fn, getRandomNumbers_fn, _lottos, _LottoPrize_instances, calculateMatchingCount_fn, calculateBonusChance_fn, determineMatchResult_fn, calculateTotalPrize_fn;
+var _numbers, _LottoManager_static, generateRandomNumber_fn, getRandomNumbers_fn, _lottos, _LottoPrize_instances, calculateMatchingCount_fn, calculateBonusChance_fn, determineMatchResult_fn, calculateTotalPrize_fn, _WebApp_instances, setResetButton_fn, setPurchaseButton_fn, setWinningLottoButton_fn, restartLotto_fn, purchaseLotto_fn, compareLotto_fn;
 (function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -205,10 +205,8 @@ const resetLotto = () => {
   resetLayout($winningLottoContents);
   const $resultContents = $(".result-contents");
   resetLayout($resultContents);
-  const $priceInput = $(".input-contents input");
-  $priceInput.prop("disabled", false).css({ "background-color": "white", color: "black" });
-  const $priceButton = $(".input-contents button");
-  $priceButton.prop("disabled", false).css({ "background-color": "#4e5ba6", cursor: "pointer" });
+  $("input").prop("disabled", false).removeClass("disable-input");
+  $("button").prop("disabled", false).removeClass("disable-button");
   $("body").css("overflow", "auto");
 };
 const focusInput = (className) => {
@@ -216,27 +214,12 @@ const focusInput = (className) => {
     $(className).first().focus();
   }, 300);
 };
-const initLotto = () => {
-  resetLotto();
-  $(".restart-button").on("click", () => {
-    resetLotto();
-    focusInput(".input-contents input");
-    WebApp();
-  });
-};
-const disableInputPrice = () => {
-  const $priceInput = $(".input-contents input");
-  $priceInput.prop("disabled", true).css({ "background-color": "lightgray", color: "gray" });
-  const $priceButton = $(".input-contents button");
-  $priceButton.prop("disabled", true).css({ "background-color": "gray", cursor: "default" });
-};
 const allowModalOpen = () => {
   const $prizeResultModal = $("modal");
   showLayout($prizeResultModal);
-  const $prizeResultButton = $(".result-contents");
-  const $closeButton = $("modal .close-button");
-  $prizeResultButton.on("click", handleModal);
-  $closeButton.on("click", handleModal);
+  $("#lottoForm input").prop("disabled", true).addClass("disable-input");
+  $(".result-contents").on("click", handleModal);
+  $("modal .close-button").on("click", handleModal);
   $("body").css("overflow", "hidden");
 };
 const handleModal = () => {
@@ -337,7 +320,6 @@ const validateWinningNumbers = (winningNumbers) => {
 };
 const printErrorMessage = (errorField, error) => {
   const prevErrorMessage = $(`${errorField} .error-message`);
-  console.log(prevErrorMessage);
   if (prevErrorMessage.length) {
     prevErrorMessage.text(error.message);
     return;
@@ -352,26 +334,18 @@ const removeErrorField = (errorField) => {
     $prevErrorMessage.remove();
   }
 };
-const repeatGetPrice = (resolve) => {
+const repeatGetPrice = () => {
   const userInputPrice = $(".input-contents input").val();
   try {
     validatePrice(userInputPrice);
     removeErrorField(".input-contents");
     allowWinningLotto();
     focusInput(".winningLotto-contents_winningLotto input");
-    resolve(userInputPrice);
+    return userInputPrice;
   } catch (error) {
     printErrorMessage(".input-contents", error);
+    return "";
   }
-};
-const getPrice = () => {
-  console.log(" 1");
-  return new Promise((resolve) => {
-    $(".input-contents form").on("submit", async (event) => {
-      event.preventDefault();
-      repeatGetPrice(resolve);
-    });
-  });
 };
 const getWinningNumber = () => {
   const winningNumbers = [];
@@ -388,32 +362,24 @@ const parseNumber = (winningNumbers, bonusNumber) => {
   bonusNumber = Number(bonusNumber);
   return { winningNumbers, bonusNumber };
 };
-const repeatWinningLotto = (resolve) => {
+const repeatWinningLotto = () => {
   const winningNumbers = getWinningNumber();
   const bonusNumber = getBonusNumber();
   try {
     validateWinningNumbers(winningNumbers);
     validateBonusNumber(winningNumbers, bonusNumber);
     removeErrorField(".winningLotto-contents");
-    resolve(parseNumber(winningNumbers, bonusNumber));
+    return parseNumber(winningNumbers, bonusNumber);
   } catch (error) {
     printErrorMessage(".winningLotto-contents", error);
+    return "";
   }
-};
-const getWinningLotto = async () => {
-  return new Promise((resolve) => {
-    $("#lottoForm").on("submit", async (event) => {
-      event.preventDefault();
-      repeatWinningLotto(resolve);
-    });
-  });
 };
 const lottoImg = "/javascript-lotto/assets/lotto-CqPatwZy.png";
 const printLottoCount = (price) => {
   const $lottoContents = $(".lotto-contents");
   const $lottoCountText = $("<p>").addClass("body").text(`총 ${price / LOTTO.PURCHASE.unit}개를 구매하였습니다.`);
   $lottoContents.append($lottoCountText);
-  disableInputPrice();
 };
 const createLottoObject = (lotto) => {
   const $lottoContainer = $("<div>").addClass("lotto-container_lotto");
@@ -484,17 +450,72 @@ const printLottoResult = (prizeResult, rate) => {
   printPrizeResult(prizeResult);
   printRateResult(rate);
 };
-initLotto();
-async function WebApp() {
-  const price = await getPrice();
-  printLottoCount(price);
-  const lottos = LottoManager.generateLottos(price);
-  printLottos(lottos);
-  const { winningNumbers, bonusNumber } = await getWinningLotto();
-  const lottoPrize = new LottoPrize(lottos);
-  const prizeResult = lottoPrize.calculateWinnings(winningNumbers, bonusNumber);
-  const ROI = lottoPrize.calculateROI(price, prizeResult);
-  allowModalOpen();
-  printLottoResult(prizeResult, ROI);
+class WebApp {
+  constructor() {
+    __privateAdd(this, _WebApp_instances);
+    resetLotto();
+    this.price = 0;
+    this.lottos = [];
+    __privateMethod(this, _WebApp_instances, setResetButton_fn).call(this);
+    __privateMethod(this, _WebApp_instances, setPurchaseButton_fn).call(this);
+    __privateMethod(this, _WebApp_instances, setWinningLottoButton_fn).call(this);
+  }
+  printResult(prizeResult, ROI) {
+    allowModalOpen();
+    printLottoResult(prizeResult, ROI);
+  }
 }
-WebApp();
+_WebApp_instances = new WeakSet();
+setResetButton_fn = function() {
+  $(".restart-button").on("click", () => {
+    resetLotto();
+    focusInput(".input-contents input");
+  });
+};
+setPurchaseButton_fn = function() {
+  $(".input-contents button").on("click", (event) => {
+    event.preventDefault();
+    if ($(".lotto-container_lotto").length !== 0) {
+      __privateMethod(this, _WebApp_instances, restartLotto_fn).call(this, event);
+    } else __privateMethod(this, _WebApp_instances, purchaseLotto_fn).call(this);
+  });
+};
+setWinningLottoButton_fn = function() {
+  $("#lottoForm").on("submit", (event) => {
+    event.preventDefault();
+    if ($(".prize-contents_rate-result").length !== 0) {
+      return;
+    }
+    __privateMethod(this, _WebApp_instances, compareLotto_fn).call(this);
+  });
+};
+restartLotto_fn = function(event) {
+  const userConfirmed = confirm(
+    "로또를 재구매 하시겠습니까? \n 구매한 로또 목록은 삭제됩니다."
+  );
+  if (!userConfirmed) {
+    event.preventDefault();
+    return;
+  } else {
+    resetLotto();
+  }
+};
+purchaseLotto_fn = function() {
+  this.price = repeatGetPrice();
+  if (this.price === "") return;
+  printLottoCount(this.price);
+  this.lottos = LottoManager.generateLottos(this.price);
+  printLottos(this.lottos);
+};
+compareLotto_fn = function() {
+  const { winningNumbers, bonusNumber } = repeatWinningLotto();
+  if (winningNumbers === void 0 || bonusNumber === void 0) return;
+  const lottoPrize = new LottoPrize(this.lottos);
+  const prizeResult = lottoPrize.calculateWinnings(
+    winningNumbers,
+    bonusNumber
+  );
+  const ROI = lottoPrize.calculateROI(this.price, prizeResult);
+  this.printResult(prizeResult, ROI);
+};
+new WebApp();

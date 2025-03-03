@@ -427,6 +427,16 @@ footer p {
   visibility: hidden;
 }
 
+.disable-button {
+  background-color: gray !important;
+  cursor: default;
+}
+
+.disable-input {
+  background-color: lightgray;
+  color: gray;
+}
+
 modal {
   visibility: hidden;
 }
